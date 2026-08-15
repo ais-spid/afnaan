@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>افراح ال الرميثة - افنان</title>
     <!-- استدعاء الخطوط: Aref Ruqaa Ink و Amiri و Tajawal -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -394,7 +392,6 @@
             box-shadow: 0 6px 14px rgba(197, 160, 89, 0.4);
         }
 
-        /* تنسيقات كروت دفتر التهاني */
         .wishes-list {
             display: flex;
             flex-direction: column;
@@ -457,7 +454,6 @@
             background: rgba(212, 175, 55, 0.1);
         }
 
-        /* نافذة المعاينة التفاعلية (Modal) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -496,7 +492,6 @@
                 opacity: 0;
                 transform: translateY(20px) scale(0.95);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -681,13 +676,12 @@
                 </div>
             </div>
 
-            <!-- Location Section (تم تحديث الرابط هنا) -->
+            <!-- Location Section -->
             <div class="card full-width reveal" id="location">
                 <div>
                     <p class="card-subtitle">مكان الاستقبال</p>
-                    <h3 class="card-title">صالة رويال روز</h3>
-                    <p style="font-size: 0.9rem; color: #444; margin-bottom: 15px;">انقر على الزر أدناه للانتقال إلى
-                        موقع القاعة عبر الخريطة</p>
+                    <h3 class="card-title">كيفية الوصول</h3>
+                    <p style="font-size: 0.9rem; color: #444; margin-bottom: 15px;">انقر على الزر أدناه للانتقال إلى موقع القاعة عبر الخريطة</p>
                 </div>
                 <button class="btn-action" style="background: var(--primary-gold); color: #111;"
                     onclick="window.open('https://maps.app.goo.gl/BjLoh1suE3dD7nro6', '_blank')">
@@ -753,20 +747,16 @@
                 <p class="card-subtitle">شاركونا تهانيكم وأمنياتكم الطيبة</p>
                 <form id="wishForm" style="margin-bottom: 15px;">
                     <div class="form-group">
-                        <input type="text" id="guestName" class="form-control" placeholder="الاسم (مثال: عائلة منصور)"
-                            required>
+                        <input type="text" id="guestName" class="form-control" placeholder="الاسم (مثال: عائلة منصور)" required>
                     </div>
                     <div class="form-group">
-                        <textarea id="guestText" class="form-control" rows="3" placeholder="اكتبوا تهانيكم هنا..."
-                            required></textarea>
+                        <textarea id="guestText" class="form-control" rows="3" placeholder="اكتبوا تهانيكم هنا..." required></textarea>
                     </div>
                     <button type="submit" class="btn-action">نشر <i class="fas fa-paper-plane"></i></button>
                 </form>
 
-                <!-- الحاوية الرئيسية لأول ثلاث تهاني -->
                 <div class="wishes-list" id="wishesContainer"></div>
 
-                <!-- زر عرض الكل -->
                 <button type="button" class="btn-show-all" id="btnShowAll" onclick="openAllWishesModal()">
                     عرض كافة التهاني (<span id="totalWishesCount">0</span>) <i class="fas fa-chevron-down"></i>
                 </button>
@@ -925,31 +915,33 @@
             }
         }
 
+        /* تعديل دالة الإرسال لتفادي حظر CORS عبر URLSearchParams */
         document.getElementById("wishForm").addEventListener("submit", async function (e) {
             e.preventDefault();
             const nameInput = document.getElementById("guestName");
             const textInput = document.getElementById("guestText");
             const submitBtn = this.querySelector('button[type="submit"]');
 
-            const newWish = {
-                name: nameInput.value.trim(),
-                text: textInput.value.trim()
-            };
-
             submitBtn.disabled = true;
             submitBtn.textContent = "جاري الإرسال...";
+
+            const formData = new URLSearchParams();
+            formData.append("name", nameInput.value.trim());
+            formData.append("text", textInput.value.trim());
 
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(newWish)
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: formData.toString()
                 });
 
                 nameInput.value = "";
                 textInput.value = "";
-
+                
                 setTimeout(fetchWishes, 1500);
             } catch (error) {
                 console.error("خطأ في الإرسال:", error);
@@ -988,7 +980,7 @@
             if (btnShowAll) {
                 btnShowAll.style.display = wishes.length <= 3 ? "none" : "block";
             }
-
+            
             window.allWishes = wishes;
         }
 
