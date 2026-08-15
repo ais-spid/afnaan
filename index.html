@@ -802,218 +802,237 @@
         <source src="mesong.mpeg" type="audio/mpeg">
         <source src="mesong.mp3" type="audio/mp3">
     </audio>
+<script>
+    var audio = document.getElementById("bgMusic");
+    var isPlaying = false;
 
-    <script>
-        var audio = document.getElementById("bgMusic");
-        var isPlaying = false;
-
-        function tryPlayAudio() {
-            if (!isPlaying) {
-                var promise = audio.play();
-                if (promise !== undefined) {
-                    promise.then(function () {
-                        isPlaying = true;
-                        updateMusicUI(true);
-                        removeAllListeners();
-                    }).catch(function (error) {
-                        console.log("Autoplay waiting for user interaction...");
-                    });
-                }
-            }
-        }
-
-        function removeAllListeners() {
-            window.removeEventListener('click', tryPlayAudio);
-            window.removeEventListener('touchstart', tryPlayAudio);
-            window.removeEventListener('scroll', tryPlayAudio);
-            window.removeEventListener('mousemove', tryPlayAudio);
-        }
-
-        window.addEventListener('load', function () {
-            tryPlayAudio();
-            startCountdown();
-            fetchWishes();
-            initScrollReveal();
-        });
-
-        window.addEventListener('click', tryPlayAudio, { once: true });
-        window.addEventListener('touchstart', tryPlayAudio, { once: true });
-        window.addEventListener('scroll', tryPlayAudio, { once: true });
-        window.addEventListener('mousemove', tryPlayAudio, { once: true });
-
-        function toggleAudio() {
-            if (audio.paused) {
-                audio.play().then(function () {
+    function tryPlayAudio() {
+        if (!isPlaying) {
+            var promise = audio.play();
+            if (promise !== undefined) {
+                promise.then(function () {
                     isPlaying = true;
                     updateMusicUI(true);
+                    removeAllListeners();
+                }).catch(function (error) {
+                    console.log("Autoplay waiting for user interaction...");
                 });
-            } else {
-                audio.pause();
-                isPlaying = false;
-                updateMusicUI(false);
             }
         }
+    }
 
-        function updateMusicUI(active) {
-            var navIcon = document.querySelector('#musicBtn i');
-            var navText = document.getElementById('musicText');
-            if (active) {
-                if (navIcon) navIcon.className = "fas fa-volume-up";
-                if (navText) navText.textContent = "الموسيقى";
-            } else {
-                if (navIcon) navIcon.className = "fas fa-volume-mute";
-                if (navText) navText.textContent = "مكتوم";
-            }
-        }
+    function removeAllListeners() {
+        window.removeEventListener('click', tryPlayAudio);
+        window.removeEventListener('touchstart', tryPlayAudio);
+        window.removeEventListener('scroll', tryPlayAudio);
+        window.removeEventListener('mousemove', tryPlayAudio);
+    }
 
-        /* كود العد التنازلي التفاعلي */
-        function startCountdown() {
-            const eventDate = new Date("August 17, 2026 16:00:00").getTime();
+    window.addEventListener('load', function () {
+        tryPlayAudio();
+        startCountdown();
+        fetchWishes();
+        initScrollReveal();
 
-            function updateTimer() {
-                const now = new Date().getTime();
-                const difference = eventDate - now;
-
-                if (difference <= 0) {
-                    document.getElementById("days").textContent = "00";
-                    document.getElementById("hours").textContent = "00";
-                    document.getElementById("minutes").textContent = "00";
-                    document.getElementById("seconds").textContent = "00";
-                    clearInterval(timerInterval);
-                    return;
-                }
-
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                document.getElementById("days").textContent = days < 10 ? "0" + days : days;
-                document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
-                document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
-            }
-
-            updateTimer();
-            const timerInterval = setInterval(updateTimer, 1000);
-        }
-
-        /* إدارة دفتر التهاني المربوط بـ Google Sheets */
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhC9MFWBejeZzHUQxkOxl6SLyqAGVRlIwiVCV90VskILDwlNxHppxOuuPhocdYHao8/exec";
-
-        async function fetchWishes() {
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: "GET",
-                    redirect: "follow"
-                });
-                if (!response.ok) throw new Error("شبكة الاتصال غير مستجيبة");
-                const wishes = await response.json();
-                renderWishesUI(wishes);
-            } catch (error) {
-                console.error("خطأ في جلب التهاني:", error);
-            }
-        }
-
-        /* تعديل دالة الإرسال لتفادي حظر CORS عبر URLSearchParams */
-        document.getElementById("wishForm").addEventListener("submit", async function (e) {
-            e.preventDefault();
-            const nameInput = document.getElementById("guestName");
-            const textInput = document.getElementById("guestText");
-            const submitBtn = this.querySelector('button[type="submit"]');
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = "جاري الإرسال...";
-
-            const formData = new URLSearchParams();
-            formData.append("name", nameInput.value.trim());
-            formData.append("text", textInput.value.trim());
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: formData.toString()
-                });
-
-                nameInput.value = "";
-                textInput.value = "";
+        // ربط حدث إرسال النموذج بعد اكتمال تحميل عناصر DOM
+        const wishForm = document.getElementById("wishForm");
+        if (wishForm) {
+            wishForm.addEventListener("submit", async function (e) {
+                e.preventDefault();
                 
-                setTimeout(fetchWishes, 1500);
-            } catch (error) {
-                console.error("خطأ في الإرسال:", error);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'نشر <i class="fas fa-paper-plane"></i>';
-            }
-        });
+                const nameInput = document.getElementById("guestName");
+                const textInput = document.getElementById("guestText");
+                const submitBtn = this.querySelector('button[type="submit"]');
 
-        function renderWishCard(wish, index) {
-            return `
-                <div class="wish-box">
-                    <div class="wish-header">
-                        <span class="name">${wish.name}</span>
-                        <span class="order-badge">المهنئ #${index + 1}</span>
-                    </div>
-                    <div class="text">"${wish.text}"</div>
-                </div>
-            `;
+                if (!nameInput.value.trim() || !textInput.value.trim()) return;
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = "جاري الإرسال...";
+
+                const formData = new URLSearchParams();
+                formData.append("name", nameInput.value.trim());
+                formData.append("text", textInput.value.trim());
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: formData.toString()
+                    });
+
+                    nameInput.value = "";
+                    textInput.value = "";
+                    
+                    setTimeout(fetchWishes, 1500);
+                } catch (error) {
+                    console.error("خطأ في الإرسال:", error);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'نشر <i class="fas fa-paper-plane"></i>';
+                }
+            });
+        }
+    });
+
+    window.addEventListener('click', tryPlayAudio, { once: true });
+    window.addEventListener('touchstart', tryPlayAudio, { once: true });
+    window.addEventListener('scroll', tryPlayAudio, { once: true });
+    window.addEventListener('mousemove', tryPlayAudio, { once: true });
+
+    function toggleAudio() {
+        if (audio.paused) {
+            audio.play().then(function () {
+                isPlaying = true;
+                updateMusicUI(true);
+            });
+        } else {
+            audio.pause();
+            isPlaying = false;
+            updateMusicUI(false);
+        }
+    }
+
+    function updateMusicUI(active) {
+        var navIcon = document.querySelector('#musicBtn i');
+        var navText = document.getElementById('musicText');
+        if (active) {
+            if (navIcon) navIcon.className = "fas fa-volume-up";
+            if (navText) navText.textContent = "الموسيقى";
+        } else {
+            if (navIcon) navIcon.className = "fas fa-volume-mute";
+            if (navText) navText.textContent = "مكتوم";
+        }
+    }
+
+    /* كود العد التنازلي التفاعلي */
+    function startCountdown() {
+        const eventDate = new Date("August 17, 2026 16:00:00").getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const difference = eventDate - now;
+
+            if (difference <= 0) {
+                document.getElementById("days").textContent = "00";
+                document.getElementById("hours").textContent = "00";
+                document.getElementById("minutes").textContent = "00";
+                document.getElementById("seconds").textContent = "00";
+                clearInterval(timerInterval);
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+            document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
         }
 
-        function renderWishesUI(wishes) {
-            const container = document.getElementById("wishesContainer");
-            const countElement = document.getElementById("totalWishesCount");
-            const btnShowAll = document.getElementById("btnShowAll");
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+    }
 
-            if (countElement) countElement.textContent = wishes.length;
-            if (container) {
-                container.innerHTML = "";
-                const firstThree = wishes.slice(0, 3);
-                firstThree.forEach((wish, index) => {
-                    container.innerHTML += renderWishCard(wish, index);
-                });
-            }
+    /* إدارة دفتر التهاني المربوط بـ Google Sheets */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhC9MFWBejeZzHUQxkOxl6SLyqAGVRlIwiVCV90VskILDwlNxHppxOuuPhocdYHao8/exec";
 
-            if (btnShowAll) {
-                btnShowAll.style.display = wishes.length <= 3 ? "none" : "block";
-            }
+    async function fetchWishes() {
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: "GET",
+                redirect: "follow"
+            });
+            if (!response.ok) throw new Error("شبكة الاتصال غير مستجيبة");
             
-            window.allWishes = wishes;
+            const result = await response.json();
+            
+            // معالجة صيغة الراجع (سواء كانت Array مباشرة أو مسندة لـ result.data)
+            const wishes = Array.isArray(result) ? result : (result.data || []);
+            
+            renderWishesUI(wishes);
+        } catch (error) {
+            console.error("خطأ في جلب التهاني:", error);
+        }
+    }
+
+    function renderWishCard(wish, index) {
+        return `
+            <div class="wish-box">
+                <div class="wish-header">
+                    <span class="name">${wish.name}</span>
+                    <span class="order-badge">المهنئ #${index + 1}</span>
+                </div>
+                <div class="text">"${wish.text}"</div>
+            </div>
+        `;
+    }
+
+    function renderWishesUI(wishes) {
+        if (!Array.isArray(wishes)) wishes = [];
+
+        const container = document.getElementById("wishesContainer");
+        const countElement = document.getElementById("totalWishesCount");
+        const btnShowAll = document.getElementById("btnShowAll");
+
+        if (countElement) countElement.textContent = wishes.length;
+        if (container) {
+            container.innerHTML = "";
+            const firstThree = wishes.slice(0, 3);
+            firstThree.forEach((wish, index) => {
+                container.innerHTML += renderWishCard(wish, index);
+            });
         }
 
-        function openAllWishesModal() {
-            const wishes = window.allWishes || [];
-            const modalContainer = document.getElementById("modalWishesContainer");
-            modalContainer.innerHTML = "";
+        if (btnShowAll) {
+            btnShowAll.style.display = wishes.length <= 3 ? "none" : "block";
+        }
+        
+        window.allWishes = wishes;
+    }
 
+    function openAllWishesModal() {
+        const wishes = window.allWishes || [];
+        const modalContainer = document.getElementById("modalWishesContainer");
+        if (modalContainer) {
+            modalContainer.innerHTML = "";
             wishes.forEach((wish, index) => {
                 modalContainer.innerHTML += renderWishCard(wish, index);
             });
-
-            document.getElementById("wishesModal").classList.add("active");
         }
 
-        function closeAllWishesModal() {
-            document.getElementById("wishesModal").classList.remove("active");
+        const wishesModal = document.getElementById("wishesModal");
+        if (wishesModal) {
+            wishesModal.classList.add("active");
         }
+    }
 
-        /* حركات التمرير (Reveal animations) */
-        function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            reveals.forEach(reveal => observer.observe(reveal));
+    function closeAllWishesModal() {
+        const wishesModal = document.getElementById("wishesModal");
+        if (wishesModal) {
+            wishesModal.classList.remove("active");
         }
-    </script>
+    }
+
+    /* حركات التمرير (Reveal animations) */
+    function initScrollReveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(reveal => observer.observe(reveal));
+    }
+</script>
 </body>
 
 </html>
