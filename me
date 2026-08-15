@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة زفاف - محمد وسارة</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-gold: #c5a059;
+            --dark-brown: #4a3b32;
+            --light-bg: rgba(255, 255, 255, 0.90);
+            --card-radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f4f4f6 url('watermarked_img_3441066962760868943.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 430px;
+            padding: 20px 16px 100px 16px;
+        }
+
+        /* Hero Header */
+        .hero {
+            text-align: center;
+            padding: 50px 10px 30px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero h1 {
+            font-family: 'Amiri', serif;
+            font-size: 3.2rem;
+            margin-bottom: 6px;
+        }
+
+        .hero .date-time {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .hero .names {
+            font-family: 'Amiri', serif;
+            font-size: 2.8rem;
+            line-height: 1.3;
+        }
+
+        .hero .ampersand {
+            color: var(--primary-gold);
+            font-size: 2rem;
+            display: block;
+        }
+
+        /* Shared Card Style */
+        .card {
+            background: var(--light-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .card-title {
+            color: var(--dark-brown);
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            color: #777;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        /* Quran Card */
+        .verse-card p {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--dark-brown);
+        }
+
+        .divider {
+            color: var(--primary-gold);
+            margin: 15px 0;
+            font-size: 0.8rem;
+        }
+
+        /* Calendar */
+        .calendar-header {
+            background: #2b5b5c;
+            color: white;
+            padding: 12px;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-around;
+            font-weight: bold;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            padding: 15px 5px;
+            background: #fff;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .day-name {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .day-num {
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .day-num.active {
+            border: 2px solid #2b5b5c;
+            border-radius: 50%;
+            color: #2b5b5c;
+            font-weight: bold;
+        }
+
+        /* Countdown */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .timer-box {
+            background: #fff;
+            padding: 10px 4px;
+            border-radius: 14px;
+        }
+
+        .timer-box .num {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark-brown);
+        }
+
+        .timer-box .label {
+            font-size: 0.7rem;
+            color: #777;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-right: 20px;
+            text-align: right;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 6px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: var(--primary-gold);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            background: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+        }
+
+        .timeline-item::after {
+            content: '🌹';
+            position: absolute;
+            right: -24px;
+            top: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Gallery Carousel */
+        .gallery-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 10px;
+        }
+
+        .gallery-card {
+            flex: 0 0 85%;
+            scroll-snap-align: center;
+            background: #fff;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            text-align: right;
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--dark-brown);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-family: inherit;
+            outline: none;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .btn-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-toggle button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .btn-toggle button.active {
+            background: #e8e3d9;
+            border-color: var(--primary-gold);
+            font-weight: bold;
+        }
+
+        .btn-action {
+            width: 100%;
+            background: var(--dark-brown);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        /* Guest Book List */
+        .wish-box {
+            background: #fff;
+            padding: 14px;
+            border-radius: 14px;
+            text-align: right;
+            margin-top: 15px;
+            border-right: 3px solid var(--primary-gold);
+        }
+
+        .wish-box .name {
+            font-weight: bold;
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        .wish-box .text {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* Footer Info */
+        .footer-tag {
+            background: #000;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 10px;
+            display: inline-block;
+            font-size: 0.75rem;
+            margin-top: 15px;
+        }
+
+        /* Bottom Nav Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 398px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #777;
+            font-size: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+        }
+
+        .nav-item.active {
+            background: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: var(--dark-brown);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-container">
+
+        <!-- Header Section -->
+        <section class="hero">
+            <h1>دعوة زفاف</h1>
+            <div class="date-time">20 أغسطـس 2026 - 17:00</div>
+            <div class="names">
+                محمد
+                <span class="ampersand">&</span>
+                سارة
+            </div>
+        </section>
+
+        <!-- Quran Verse Section -->
+        <div class="card verse-card">
+            <p>"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ
+                بَيْنَكُم مَّوَدَّةً وَرَحْمَةً إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ"</p>
+            <div class="divider">◆ ◆ ◆</div>
+            <p style="font-size: 0.95rem;">يسعدنا ويشرفنا حضوركم لمشاركتنا فرحتنا.</p>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="card">
+            <div class="calendar-header">
+                <span>الخميس</span>
+                <span>أغسطس</span>
+                <span>2026</span>
+            </div>
+            <div class="calendar-grid">
+                <div class="day-name">أحد</div>
+                <div class="day-name">إثنين</div>
+                <div class="day-name">ثلاثاء</div>
+                <div class="day-name">أربعاء</div>
+                <div class="day-name">خميس</div>
+                <div class="day-name">جمعة</div>
+                <div class="day-name">سبت</div>
+                <div class="day-num"></div>
+                <div class="day-num"></div>
+                <div class="day-num"></div>
+                <div class="day-num"></div>
+                <div class="day-num"></div>
+                <div class="day-num"></div>
+                <div class="day-num">1</div>
+                <div class="day-num">2</div>
+                <div class="day-num">3</div>
+                <div class="day-num">4</div>
+                <div class="day-num">5</div>
+                <div class="day-num">6</div>
+                <div class="day-num">7</div>
+                <div class="day-num">8</div>
+                <div class="day-num">9</div>
+                <div class="day-num">10</div>
+                <div class="day-num">11</div>
+                <div class="day-num">12</div>
+                <div class="day-num">13</div>
+                <div class="day-num">14</div>
+                <div class="day-num">15</div>
+                <div class="day-num">16</div>
+                <div class="day-num">17</div>
+                <div class="day-num">18</div>
+                <div class="day-num">19</div>
+                <div class="day-num active">20</div>
+                <div class="day-num">21</div>
+                <div class="day-num">22</div>
+            </div>
+            <button class="btn-action" style="margin-top: 15px; background: #fff; color: #333; border: 1px solid #ddd;">
+                <i class="far fa-calendar-alt"></i> حفظ التاريخ
+            </button>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="card">
+            <h3 class="card-title">العد التنازلي</h3>
+            <div class="timer-grid">
+                <div class="timer-box">
+                    <div class="num" id="days">33</div>
+                    <div class="label">أيام</div>
+                </div>
+                <div class="timer-box">
+                    <div class="num" id="hours">07</div>
+                    <div class="label">ساعات</div>
+                </div>
+                <div class="timer-box">
+                    <div class="num" id="minutes">30</div>
+                    <div class="label">دقائق</div>
+                </div>
+                <div class="timer-box">
+                    <div class="num" id="seconds">53</div>
+                    <div class="label">ثواني</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Section -->
+        <div class="card">
+            <h3 class="card-title">برنامج الحفل</h3>
+            <p class="card-subtitle">تفاصيل الاحتفال</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>18:00 - استقبال الضيوف</strong>
+                    <p style="font-size: 0.8rem; color: #666;">مشروبات ترحيبية</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>19:00 - مراسم الزفاف</strong>
+                    <p style="font-size: 0.8rem; color: #666;">تبادل العهود والخواتم</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>22:00 - العشاء</strong>
+                    <p style="font-size: 0.8rem; color: #666;">بوفيه فاخر ومفاجآت</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="card" id="gallery">
+            <p class="card-subtitle">معرض الصور</p>
+            <h3 class="card-title" style="margin-bottom: 15px;">لحظاتنا الجميلة</h3>
+            <div class="gallery-container">
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80"
+                        alt="صورة">
+                </div>
+                <div class="gallery-card">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80"
+                        alt="صورة">
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Section -->
+        <div class="card" id="location">
+            <p class="card-subtitle">مكان الاستقبال</p>
+            <h3 class="card-title">كيفية الوصول</h3>
+            <p style="font-size: 0.85rem; color: #555; margin-bottom: 15px;">Salle des Fêtes Étoile, 123 Rue de la Joie,
+                Paris</p>
+            <button class="btn-action" style="background: var(--primary-gold);"
+                onclick="window.open('https://maps.google.com')">
+                فتح خرائط GOOGLE
+            </button>
+        </div>
+
+        <!-- RSVP Section -->
+        <div class="card" id="rsvp">
+            <h3 class="card-title">تأكيد الحضور</h3>
+            <p class="card-subtitle">يرجى الرد قبل 20 أغسطس 2026</p>
+
+            <form>
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" class="form-control" placeholder="مثال: أحمد منصور" required>
+                </div>
+                <div class="form-group">
+                    <label>الحضور</label>
+                    <div class="btn-toggle">
+                        <button type="button" class="active">حاضر ✓</button>
+                        <button type="button">غير حاضر</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>عدد الأشخاص</label>
+                    <select class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ملاحظة / قيود غذائية</label>
+                    <input type="text" class="form-control" placeholder="اختياري (مثال: نباتي، حساسية...)">
+                </div>
+                <button type="submit" class="btn-action">تأكيد <i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+
+        <!-- Wishes & Guestbook Section -->
+        <div class="card">
+            <h3 class="card-title">دفتر التهاني</h3>
+            <form style="margin-bottom: 15px;">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="مثال: عائلة منصور">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" placeholder="اكتبوا تهانيكم هنا..."></textarea>
+                </div>
+                <button type="button" class="btn-action">نشر <i class="fas fa-paper-plane"></i></button>
+            </form>
+
+            <div class="wish-box">
+                <div class="name">عائلة منصور</div>
+                <div class="text">"أجمل التهاني والتبريكات لهذا الزواج المبارك. بارك الله لكما وبارك عليكما وجمع بينكما
+                    في خير."</div>
+            </div>
+        </div>
+
+        <!-- Gifts Section -->
+        <div class="card">
+            <div style="font-size: 2.5rem; color: var(--primary-gold); margin-bottom: 10px;">🎁</div>
+            <h3 class="card-title">الهدايا والحصالة</h3>
+            <p style="letter-spacing: 2px; font-weight: bold; margin: 10px 0 15px; color: #555;">CH XXXX XXXX XXX XXX
+            </p>
+            <button class="btn-action" style="background: var(--dark-brown);" onclick="alert('تم نسخ الحساب');">
+                <i class="far fa-copy"></i> نسخ المعلومات
+            </button>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="card" id="contact">
+            <h3 class="card-title">هل لديكم أسئلة؟</h3>
+            <h2 style="color: var(--dark-brown); font-size: 1.5rem; margin-bottom: 15px;">تواصلوا معنا</h2>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="https://wa.me/" class="btn-action"
+                    style="background: #fff; color: #333; border: 1px solid #ddd;">
+                    WhatsApp <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                </a>
+                <a href="tel:" class="btn-action" style="background: #fff; color: #333; border: 1px solid #ddd;">
+                    اتصال <i class="fas fa-phone-alt" style="color: var(--primary-gold);"></i>
+                </a>
+            </div>
+            <div class="footer-tag">Crafted with ♥ by Buharita.com</div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="#rsvp" class="nav-item active">
+            <i class="far fa-heart"></i>
+            <span>الحضور</span>
+        </a>
+        <a href="#location" class="nav-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>المكان</span>
+        </a>
+        <a href="#gallery" class="nav-item">
+            <i class="far fa-image"></i>
+            <span>الصور</span>
+        </a>
+        <a href="#music" class="nav-item" onclick="toggleAudio(); return false;">
+            <i class="fas fa-volume-up"></i>
+            <span>الموسيقى</span>
+        </a>
+        <a href="#contact" class="nav-item">
+            <i class="fas fa-phone-alt"></i>
+            <span>تواصل</span>
+        </a>
+    </nav>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function toggleAudio() {
+            var audio = document.getElementById("bgMusic");
+            if (audio.paused) {
+                audio.play();
+                alert("تم تشغيل الموسيقى 🎵");
+            } else {
+                audio.pause();
+                alert("تم إيقاف الموسيقى 🔇");
+            }
+        }
+    </script>
+</body>
+
+</html>
